@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苗栗縣農會 - 農村社區小舖</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        hakka: {
+                            light: '#f0fdf4',
+                            DEFAULT: '#22c55e', // 農會綠
+                            dark: '#15803d',
+                            accent: '#ea580c', // 紅棗橘紅
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 自訂捲軸樣式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        /* 隱藏彈出視窗的預設狀態 */
+        .modal-hidden {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .modal-active {
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans smooth-scroll">
+
+    <!-- 導覽列 -->
+    <nav class="bg-white shadow-md fixed w-full z-50 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-leaf text-hakka-DEFAULT text-2xl"></i>
+                    <span class="font-bold text-xl tracking-wider text-gray-900">苗栗縣農會<span class="text-hakka-DEFAULT">農村社區小舖</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-gray-600 hover:text-hakka-DEFAULT transition">關於我們</a>
+                    <a href="#o2o-campaign" class="text-hakka-accent font-bold hover:text-orange-700 transition">線上領券優惠 <i class="fa-solid fa-fire"></i></a>
+                    <a href="#products" class="text-gray-600 hover:text-hakka-DEFAULT transition">在地農特產</a>
+                </div>
+                <div class="flex items-center">
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-hakka-DEFAULT transition">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        <span id="cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-hakka-accent rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄區塊 (Hero Section) -->
+    <header class="relative pt-16 pb-32 flex content-center items-center justify-center min-h-[75vh]">
+        <div class="absolute top-0 w-full h-full bg-center bg-cover" style="background-image: url('https://images.unsplash.com/photo-1595859703080-8b4382f6aa8b?q=80&w=2000&auto=format&fit=crop');">
+            <span id="blackOverlay" class="w-full h-full absolute opacity-60 bg-black"></span>
+        </div>
+        <div class="container relative mx-auto">
+            <div class="items-center flex flex-wrap">
+                <div class="w-full lg:w-8/12 px-4 ml-auto mr-auto text-center">
+                    <div class="pr-12">
+                        <h1 class="text-white font-semibold text-4xl md:text-5xl leading-tight">
+                            從線上故事，走入在地真實
+                        </h1>
+                        <p class="mt-4 text-lg text-gray-200">
+                            好客商城專屬合作夥伴！<br>
+                            線上購買文創商品，選擇「公館農村社區小舖」免運自取，<br>順道帶走最道地的公館紅棗與客庄熱情。
+                        </p>
+                        <div class="mt-8 flex justify-center space-x-4">
+                            <button onclick="document.getElementById('products').scrollIntoView()" class="bg-hakka-DEFAULT text-white active:bg-hakka-dark font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
+                                預購在地農產
+                            </button>
+                            <button onclick="document.getElementById('o2o-campaign').scrollIntoView()" class="bg-white text-hakka-dark font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
+                                領取奉茶體驗券
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- O2O 策略展示區：完美呼應報告中的「數位核銷導流」 -->
+    <section id="o2o-campaign" class="pb-20 bg-gray-50 -mt-24 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap">
+                <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
+                    <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-xl transition hover:-translate-y-1 hover:shadow-xl">
+                        <div class="px-4 py-5 flex-auto">
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-red-400">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <h6 class="text-xl font-semibold">1. 線上沉浸體驗</h6>
+                            <p class="mt-2 mb-4 text-gray-500">
+                                在好客商城閱讀客庄文化故事，感受文化深度，並將心儀商品加入購物車。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-4/12 px-4 text-center">
+                    <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-xl transition hover:-translate-y-1 hover:shadow-xl">
+                        <div class="px-4 py-5 flex-auto">
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-hakka-DEFAULT">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <h6 class="text-xl font-semibold">2. 選擇實體小舖自取</h6>
+                            <p class="mt-2 mb-4 text-gray-500">
+                                結帳時選擇「公館農村社區小舖」免運自取，打破物流不確定性，降低放棄率！
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-6 w-full md:w-4/12 px-4 text-center">
+                    <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-xl border-2 border-hakka-accent transition hover:-translate-y-1 hover:shadow-xl">
+                        <div class="px-4 py-5 flex-auto">
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-hakka-accent">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <h6 class="text-xl font-semibold text-hakka-accent">3. 領券核銷與交叉銷售</h6>
+                            <p class="mt-2 mb-4 text-gray-500">
+                                憑線上發放的數位體驗券到店「奉茶」，順便選購公館在地農特產，創造 O2O 業績閉環。
+                            </p>
+                            <button onclick="openVoucherModal()" class="mt-2 w-full bg-hakka-accent text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition">
+                                立即領取專屬折價券
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 商品區：呼應報告中的「跨產業交叉銷售」 -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">公館在地農特產預購</h2>
+                <p class="text-gray-500 mt-2">線上訂購，門市取貨。帶走屬於苗栗的土地記憶。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 商品 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500 relative">
+                        <img src="https://images.unsplash.com/photo-1596423735880-5c689d06b026?q=80&w=600&auto=format&fit=crop" alt="公館紅棗乾" class="w-full h-full object-cover">
+                        <span class="absolute top-2 right-2 bg-hakka-accent text-white text-xs font-bold px-2 py-1 rounded">熱銷推薦</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">苗栗公館 頂級紅棗乾</h3>
+                        <p class="text-gray-500 text-sm mb-3">台灣唯一紅棗產地，純天然日曬，皮薄肉厚。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-hakka-accent font-bold text-xl">NT$ 350</span>
+                            <button onclick="addToCart('苗栗公館 頂級紅棗乾', 350, 'https://images.unsplash.com/photo-1596423735880-5c689d06b026?q=80&w=600&auto=format&fit=crop')" class="bg-hakka-DEFAULT text-white px-3 py-1 rounded hover:bg-hakka-dark transition">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                         <img src="https://images.unsplash.com/photo-1605300305881-bda4eb48fc94?q=80&w=600&auto=format&fit=crop" alt="公館芋頭" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">公館在地 檳榔心芋頭</h3>
+                        <p class="text-gray-500 text-sm mb-3">口感綿密鬆軟，香氣濃郁，適合燉煮甜品。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-hakka-accent font-bold text-xl">NT$ 180</span>
+                            <button onclick="addToCart('公館在地 檳榔心芋頭', 180, 'https://images.unsplash.com/photo-1605300305881-bda4eb48fc94?q=80&w=600&auto=format&fit=crop')" class="bg-hakka-DEFAULT text-white px-3 py-1 rounded hover:bg-hakka-dark transition">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                        <img src="https://images.unsplash.com/photo-1559550993-c40d12ec09c7?q=80&w=600&auto=format&fit=crop" alt="客家紫蘇梅" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">手工客家紫蘇梅</h3>
+                        <p class="text-gray-500 text-sm mb-3">遵循傳統客家古法釀製，酸甜回甘好滋味。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-hakka-accent font-bold text-xl">NT$ 220</span>
+                            <button onclick="addToCart('手工客家紫蘇梅', 220, 'https://images.unsplash.com/photo-1559550993-c40d12ec09c7?q=80&w=600&auto=format&fit=crop')" class="bg-hakka-DEFAULT text-white px-3 py-1 rounded hover:bg-hakka-dark transition">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品 4 (文創商品模擬) -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500 relative">
+                        <img src="https://images.unsplash.com/photo-1584992236310-6edddc08acff?q=80&w=600&auto=format&fit=crop" alt="好客商城聯名托特包" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">好客商城聯名</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">客家花布文創托特包</h3>
+                        <p class="text-gray-500 text-sm mb-3">線上看故事，線下帶走它。融合傳統與現代設計。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-hakka-accent font-bold text-xl">NT$ 490</span>
+                            <button onclick="addToCart('客家花布文創托特包', 490, 'https://images.unsplash.com/photo-1584992236310-6edddc08acff?q=80&w=600&auto=format&fit=crop')" class="bg-hakka-DEFAULT text-white px-3 py-1 rounded hover:bg-hakka-dark transition">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於實體店面 -->
+    <section id="about" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full md:w-5/12 px-4 mr-auto ml-auto">
+                    <div class="text-gray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
+                        <i class="fa-solid fa-map-location-dot text-2xl text-hakka-DEFAULT"></i>
+                    </div>
+                    <h3 class="text-3xl mb-2 font-semibold leading-normal">
+                        歡迎來到苗栗縣公館鄉
+                    </h3>
+                    <p class="text-lg font-light leading-relaxed mt-4 mb-4 text-gray-600">
+                        「農村社區小舖」不僅是實體農產的銷售據點，更是我們解決好客商城「電商基礎建設斷層」的關鍵節點。
+                    </p>
+                    <p class="text-lg font-light leading-relaxed mt-0 mb-4 text-gray-600">
+                        在這裡，我們提供舒適的實體空間，讓線上消費者能親自體驗客家文化，解決了物流不清的痛點，更串聯了 O2O (Online to Offline) 的完整顧客旅程。
+                    </p>
+                    <div class="mt-6">
+                        <div class="flex items-center mt-4">
+                            <i class="fa-solid fa-location-dot text-hakka-DEFAULT mr-3"></i>
+                            <span class="text-gray-700">36346 苗栗縣公館鄉館南352號</span>
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <i class="fa-solid fa-phone text-hakka-DEFAULT mr-3"></i>
+                            <span class="text-gray-700">(037) 222-222 (模擬電話)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-5/12 px-4 mr-auto ml-auto mt-10 md:mt-0">
+                    <div class="relative flex flex-col min-w-0 break-words bg-white w-full shadow-lg rounded-lg bg-hakka-DEFAULT overflow-hidden">
+                        <!-- 模擬 Google Map 圖片 -->
+                        <img alt="地圖位置" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop" class="w-full align-middle rounded-t-lg opacity-80 mix-blend-overlay">
+                        <div class="p-6 bg-hakka-dark text-white">
+                            <h4 class="text-xl font-bold">小舖營業時間</h4>
+                            <p class="text-md mt-2">週一至週日：08:00 - 17:00</p>
+                            <p class="text-sm mt-4 opacity-80">* 選擇「店取」的顧客，請於營業時間內憑手機簡訊或數位條碼取件。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer 包含組員資訊 -->
+    <footer class="bg-gray-800 text-white pt-10 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between text-center lg:text-left">
+                <div class="w-full lg:w-6/12 px-4">
+                    <h4 class="text-2xl font-bold">PBL3 期中報告：好客商城 O2O 專案</h4>
+                    <h5 class="text-lg mt-0 mb-2 text-gray-400">
+                        第二組 - 以苗栗縣農會(農村社區小舖)為例
+                    </h5>
+                    <p class="text-sm text-gray-500 mt-4 max-w-md">
+                        本網頁為電子商務課程 PBL 思考練習之概念展示，實踐「BOPIS 取貨」、「數位導流核銷」與「打通數據斷層」等策略。
+                    </p>
+                </div>
+                <div class="w-full lg:w-6/12 px-4 mt-8 lg:mt-0">
+                    <h5 class="text-lg font-bold mb-4">專案組員</h5>
+                    <ul class="text-gray-400">
+                        <li class="mb-2"><i class="fa-solid fa-user-tie mr-2"></i> 組長：張景雅 (U1110001)</li>
+                        <li class="mb-2"><i class="fa-solid fa-pen-nib mr-2"></i> 紀錄者：郎郁婷 (U12580014)</li>
+                        <li class="mb-2"><i class="fa-solid fa-microphone mr-2"></i> 報告者：劉佳玲 (U1258004)</li>
+                        <li class="mb-2"><i class="fa-solid fa-magnifying-glass mr-2"></i> 分析討論者：范恩慈 (U1258006)</li>
+                        <li class="mb-2"><i class="fa-solid fa-lightbulb mr-2"></i> 分析討論者：陳姿吟 (U1258008)</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-6 border-gray-700" />
+            <div class="flex flex-wrap items-center md:justify-between justify-center">
+                <div class="w-full md:w-4/12 px-4 mx-auto text-center">
+                    <div class="text-sm text-gray-500 font-semibold py-1">
+                        &copy; 2026 第二組 PBL 報告專用. Demo Website.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 購物車 Modal (呼應報告：解決結帳繁瑣與物流不清) -->
+    <div id="cart-modal" class="fixed inset-0 z-[100] modal-hidden flex justify-end">
+        <div class="absolute inset-0 bg-black opacity-50" onclick="toggleCart()"></div>
+        <div class="relative bg-white w-full max-w-md h-full shadow-2xl flex flex-col transform transition-transform translate-x-full duration-300" id="cart-panel">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h2 class="text-xl font-bold flex items-center"><i class="fa-solid fa-cart-shopping mr-2 text-hakka-DEFAULT"></i> 購物車</h2>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 transition">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4" id="cart-items-container">
+                <!-- 購物車內容將透過 JS 渲染 -->
+                <div class="text-center text-gray-400 mt-10" id="empty-cart-msg">
+                    <i class="fa-solid fa-basket-shopping text-4xl mb-3"></i>
+                    <p>購物車目前是空的</p>
+                </div>
+            </div>
+
+            <!-- 結帳區 (實踐報告的 BOPIS 概念) -->
+            <div class="p-4 border-t bg-gray-50">
+                <div class="mb-4">
+                    <h3 class="text-sm font-bold text-gray-700 mb-2">請選擇物流方式 (A/B 測試優化版)</h3>
+                    <!-- 預設選項為免運自取，解決 65% 放棄率 -->
+                    <label class="flex items-center p-3 border-2 border-hakka-DEFAULT rounded-lg bg-green-50 cursor-pointer mb-2">
+                        <input type="radio" name="shipping" checked class="text-hakka-DEFAULT focus:ring-hakka-DEFAULT h-4 w-4">
+                        <div class="ml-3">
+                            <span class="block text-sm font-bold text-gray-800">公館農村社區小舖免運自取 (BOPIS)</span>
+                            <span class="block text-xs text-gray-500">解決物流不透明，取貨時贈送奉茶！</span>
+                        </div>
+                        <span class="ml-auto text-hakka-DEFAULT font-bold">NT$ 0</span>
+                    </label>
+                    <label class="flex items-center p-3 border rounded-lg bg-white cursor-pointer opacity-60">
+                        <input type="radio" name="shipping" class="h-4 w-4 text-gray-400">
+                        <div class="ml-3">
+                            <span class="block text-sm font-bold text-gray-600">一般宅配</span>
+                        </div>
+                        <span class="ml-auto text-gray-600">NT$ 120</span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600 font-bold">總計金額</span>
+                    <span class="text-2xl font-bold text-hakka-accent" id="cart-total">NT$ 0</span>
+                </div>
+                
+                <!-- 一鍵結帳 (減少摩擦力) -->
+                <button onclick="checkout()" class="w-full bg-hakka-accent hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg flex justify-center items-center transition">
+                    <i class="fa-solid fa-bolt mr-2"></i> 一鍵極簡結帳
+                </button>
+                <p class="text-xs text-center text-gray-400 mt-2">打通 CRM 系統，無需繁瑣註冊即可結帳</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 數位折價券 Modal (呼應報告：追蹤 O2O 隱形業績) -->
+    <div id="voucher-modal" class="fixed inset-0 z-[100] modal-hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black opacity-60" onclick="closeVoucherModal()"></div>
+        <div class="relative bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="voucher-panel">
+            <div class="bg-hakka-accent p-6 text-center text-white relative">
+                <button onclick="closeVoucherModal()" class="absolute top-2 right-4 text-white hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <i class="fa-solid fa-ticket text-4xl mb-2"></i>
+                <h2 class="text-2xl font-bold">數位奉茶體驗券</h2>
+                <p class="text-sm opacity-90 mt-1">追蹤線上瀏覽轉化線下實體行為</p>
+            </div>
+            <div class="p-6 text-center">
+                <div class="mb-4">
+                    <p class="text-gray-600 text-sm mb-2">憑此條碼至<strong class="text-hakka-dark">苗栗縣農會農村社區小舖</strong><br>即可免費兌換客家奉茶一杯，<br>並享現場農特產 9 折優惠！</p>
+                </div>
+                <!-- 模擬 QR Code / 條碼 -->
+                <div class="bg-gray-100 p-4 rounded-lg flex justify-center items-center mb-4 border border-dashed border-gray-300">
+                    <div class="text-center">
+                        <i class="fa-solid fa-qrcode text-6xl text-gray-800"></i>
+                        <p class="mt-2 font-mono tracking-widest text-gray-500">ID: O2O-886-G2</p>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mb-4">*此條碼為模擬 CRM 系統打通 POS 機制</p>
+                <button onclick="saveVoucher()" class="w-full border-2 border-hakka-DEFAULT text-hakka-DEFAULT font-bold py-2 px-4 rounded hover:bg-hakka-light transition">
+                    存入我的會員錢包
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 初次造訪使用指引 (Onboarding) -->
+    <div id="onboarding-modal" class="fixed inset-0 z-[150] flex items-center justify-center px-4 transition-opacity duration-500 opacity-100">
+        <div class="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onclick="closeOnboarding()"></div>
+        <div class="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 mt-10">
+            <div class="bg-hakka-DEFAULT p-6 text-white text-center relative">
+                <i class="fa-solid fa-map-location-dot text-4xl mb-3"></i>
+                <h2 class="text-2xl font-bold">歡迎體驗 O2O 虛實整合概念網！</h2>
+                <p class="text-sm mt-2 opacity-90">這是 PBL3 第二組專案的實作展示</p>
+                <button onclick="closeOnboarding()" class="absolute top-4 right-4 text-white hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <h3 class="font-bold text-gray-800 mb-4 text-center">請務必體驗以下三大功能亮點：</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-hakka-accent flex items-center justify-center font-bold mt-1">1</div>
+                        <div class="ml-3">
+                            <h4 class="text-md font-bold text-gray-800">降低 65% 放棄率的「購物車」</h4>
+                            <p class="text-sm text-gray-600">點擊任一商品加入購物車，體驗預設的「免運自取」與一鍵結帳流程。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-hakka-DEFAULT flex items-center justify-center font-bold mt-1">2</div>
+                        <div class="ml-3">
+                            <h4 class="text-md font-bold text-gray-800">右下角「P小編」心理測驗</h4>
+                            <p class="text-sm text-gray-600">點擊右下角跳動按鈕，完成測驗配對專屬商品，並領取「實體奉茶券」。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center font-bold mt-1">3</div>
+                        <div class="ml-3">
+                            <h4 class="text-md font-bold text-gray-800">實體門市的「交叉銷售」</h4>
+                            <p class="text-sm text-gray-600">瀏覽公館在地農特產品，了解「線上取貨」如何帶動「線下實際營收」。</p>
+                        </div>
+                    </li>
+                </ul>
+                <button onclick="closeOnboarding()" class="mt-8 w-full bg-hakka-accent hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition transform hover:-translate-y-1">
+                    我了解了，開始體驗！
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- P小編 AI 互動導覽 (模擬報告中的 RAG 系統) -->
+    <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-[90] flex flex-col items-end">
+        <!-- 聊天視窗 -->
+        <div id="chat-window" class="bg-white w-80 rounded-2xl shadow-2xl mb-4 overflow-hidden transform transition-all duration-300 scale-0 origin-bottom-right opacity-0">
+            <div class="bg-hakka-dark text-white p-4 flex justify-between items-center">
+                <div class="flex items-center font-bold">
+                    <i class="fa-solid fa-robot mr-2 text-xl"></i> 客庄導覽員 (P小編)
+                </div>
+                <button onclick="toggleChat()" class="hover:text-gray-300 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-4 bg-gray-50 h-64 overflow-y-auto" id="chat-content">
+                <!-- 對話內容 -->
+                <div class="flex mb-4">
+                    <div class="bg-green-100 text-gray-800 border border-green-200 rounded-lg rounded-tl-none p-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
+                        你好！我是報告裡的專屬導覽員 <strong>P小編</strong>。<br>我們來玩個<strong>「客庄旅人心理測驗」</strong>吧！這能幫你配對專屬的在地好物喔！<br><br>💡 <strong>Q: 當你踏入苗栗公館，你最想體驗什麼樣的感覺？</strong>
+                    </div>
+                </div>
+                <div id="quiz-options" class="flex flex-col space-y-2 mt-2 pl-4">
+                    <button onclick="answerPersonalityTest('A')" class="border-2 border-hakka-DEFAULT text-hakka-dark hover:bg-hakka-light px-4 py-2 rounded-xl text-sm transition font-bold shadow-sm text-left leading-relaxed">
+                        👉 A. 渴望溫暖療癒，想找點天然養生滋味
+                    </button>
+                    <button onclick="answerPersonalityTest('B')" class="border-2 border-hakka-DEFAULT text-hakka-dark hover:bg-hakka-light px-4 py-2 rounded-xl text-sm transition font-bold shadow-sm text-left leading-relaxed">
+                        👉 B. 喜歡酸甜回甘，想體驗傳統慢活步調
+                    </button>
+                    <button onclick="answerPersonalityTest('C')" class="border-2 border-hakka-DEFAULT text-hakka-dark hover:bg-hakka-light px-4 py-2 rounded-xl text-sm transition font-bold shadow-sm text-left leading-relaxed">
+                        👉 C. 尋找手作溫度，想帶走專屬文化記憶
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 懸浮按鈕 -->
+        <button onclick="toggleChat()" class="bg-hakka-accent hover:bg-orange-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-110 relative animate-bounce">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span class="absolute top-0 right-0 block h-4 w-4 rounded-full bg-red-500 ring-2 ring-white"></span>
+        </button>
+    </div>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 購物車資料
+        let cart = [];
+        
+        // 切換購物車顯示
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            const panel = document.getElementById('cart-panel');
+            
+            if (modal.classList.contains('modal-hidden')) {
+                modal.classList.remove('modal-hidden');
+                modal.classList.add('modal-active');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    modal.classList.remove('modal-active');
+                    modal.classList.add('modal-hidden');
+                }, 300);
+            }
+        }
+
+        // 加入購物車
+        function addToCart(name, price, img) {
+            cart.push({ name, price, img });
+            updateCartUI();
+            
+            // 提示動畫
+            const countBadge = document.getElementById('cart-count');
+            countBadge.classList.add('scale-150');
+            setTimeout(() => countBadge.classList.remove('scale-150'), 200);
+            
+            // 如果是在桌機上，可以選擇自動打開購物車
+            // toggleCart();
+        }
+
+        // 移除購物車項目
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // 更新購物車 UI
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const totalEl = document.getElementById('cart-total');
+            const countBadge = document.getElementById('cart-count');
+            
+            countBadge.innerText = cart.length;
+            
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                container.appendChild(emptyMsg);
+                emptyMsg.style.display = 'block';
+                totalEl.innerText = 'NT$ 0';
+                return;
+            }
+            
+            emptyMsg.style.display = 'none';
+            let html = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                total += item.price;
+                html += `
+                    <div class="flex items-center mb-4 pb-4 border-b">
+                        <img src="${item.img}" class="w-16 h-16 object-cover rounded-md mr-4">
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-gray-800">${item.name}</h4>
+                            <p class="text-hakka-accent font-bold text-sm mt-1">NT$ ${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            totalEl.innerText = `NT$ ${total}`;
+        }
+
+        // 結帳模擬
+        function checkout() {
+            if (cart.length === 0) {
+                alert("購物車是空的喔！請先挑選商品。");
+                return;
+            }
+            // 實踐報告中的概念：強調店取成功
+            alert("結帳成功！\n您已選擇「公館農村社區小舖」免運自取。\n系統已透過 O2O 機制將您的訂單同步至實體門市 POS。\n屆時到店取貨還可獲得奉茶一杯！");
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // 數位折價券邏輯
+        function openVoucherModal() {
+            const modal = document.getElementById('voucher-modal');
+            const panel = document.getElementById('voucher-panel');
+            modal.classList.remove('modal-hidden');
+            modal.classList.add('modal-active');
+            setTimeout(() => panel.classList.remove('scale-95'), 10);
+        }
+
+        function closeVoucherModal() {
+            const modal = document.getElementById('voucher-modal');
+            const panel = document.getElementById('voucher-panel');
+            panel.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.remove('modal-active');
+                modal.classList.add('modal-hidden');
+            }, 300);
+        }
+
+        function saveVoucher() {
+            alert("已成功綁定至您的 CRM 會員帳號！\n請於實體店出示此畫面由店員核銷 (與 POS 打通)，\n協助我們證明線上影響力能轉化為實體營收！");
+            closeVoucherModal();
+        }
+
+        // --- 關閉使用指引 ---
+        function closeOnboarding() {
+            const modal = document.getElementById('onboarding-modal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        // --- 新增互動功能：P小編 AI 導覽 (模擬 RAG 系統互動) ---
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const widgetBtn = document.querySelector('#ai-chat-widget > button');
+            
+            if (chatWindow.classList.contains('scale-0')) {
+                // 打開對話框
+                chatWindow.classList.remove('scale-0', 'opacity-0');
+                chatWindow.classList.add('scale-100', 'opacity-100');
+                widgetBtn.classList.remove('animate-bounce'); // 點開後停止彈跳提示
+                
+                // 隱藏紅點提示
+                const notificationDot = widgetBtn.querySelector('span');
+                if(notificationDot) notificationDot.style.display = 'none';
+            } else {
+                // 關閉對話框
+                chatWindow.classList.remove('scale-100', 'opacity-100');
+                chatWindow.classList.add('scale-0', 'opacity-0');
+            }
+        }
+
+        function answerPersonalityTest(choice) {
+            const chatContent = document.getElementById('chat-content');
+            const options = document.getElementById('quiz-options');
+            
+            // 1. 移除選項
+            if(options) options.remove();
+
+            // 2. 顯示使用者的回答
+            let userAnswerText = "";
+            if (choice === 'A') userAnswerText = "A. 渴望溫暖療癒";
+            else if (choice === 'B') userAnswerText = "B. 喜歡酸甜回甘";
+            else if (choice === 'C') userAnswerText = "C. 尋找手作溫度";
+
+            const userMsg = `
+                <div class="flex mb-4 justify-end">
+                    <div class="bg-gray-200 text-gray-800 rounded-lg rounded-tr-none p-3 max-w-[85%] text-sm shadow-sm font-semibold">
+                        ${userAnswerText}
+                    </div>
+                </div>
+            `;
+            chatContent.innerHTML += userMsg;
+            chatContent.scrollTop = chatContent.scrollHeight;
+
+            // 3. 模擬 AI 延遲回覆、顯示配對結果並發放兌換券
+            setTimeout(() => {
+                let responseHtml = '';
+                let resultTitle = '';
+                let matchProduct = '';
+                let matchDesc = '';
+
+                if (choice === 'A') {
+                    resultTitle = "溫暖養生派";
+                    matchProduct = "苗栗公館 頂級紅棗乾";
+                    matchDesc = "全台唯一產地的天然日曬紅棗，最適合渴望被療癒的你！";
+                } else if (choice === 'B') {
+                    resultTitle = "慢活品味派";
+                    matchProduct = "手工客家紫蘇梅";
+                    matchDesc = "遵循古法釀製的酸甜好滋味，能讓你放慢步調，品味生活。";
+                } else if (choice === 'C') {
+                    resultTitle = "文化深度派";
+                    matchProduct = "客家花布文創托特包";
+                    matchDesc = "融合傳統與現代的質感手作，最適合喜歡收集故事的你！";
+                }
+
+                responseHtml = `
+                    <div class="flex mb-4">
+                        <div class="bg-green-100 text-gray-800 border border-green-200 rounded-lg rounded-tl-none p-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
+                            ✨ 測驗結果出爐：你是<strong>【${resultTitle}】</strong>！<br><br>
+                            專屬於你的客庄配對好物是：<br>👉 <strong>${matchProduct}</strong><br>
+                            <span class="text-xs text-gray-600">${matchDesc}</span><br><br>
+                            既然配對成功了，P小編送你一張【實體小舖奉茶兌換券】，現在就選擇「免運自取」，親自來公館找尋你的專屬記憶吧！
+                            <button onclick="openVoucherModal(); toggleChat();" class="mt-3 w-full bg-hakka-DEFAULT text-white font-bold py-2 px-2 rounded hover:bg-hakka-dark transition text-sm text-center shadow">
+                                <i class="fa-solid fa-ticket mr-1"></i> 領取兌換券
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                chatContent.innerHTML += responseHtml;
+                chatContent.scrollTop = chatContent.scrollHeight; // 滾動到最底部
+            }, 800);
+        }
+    </script>
+</body>
+</html>
